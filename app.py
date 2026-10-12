@@ -5,6 +5,18 @@ from fredapi import Fred
 # Configuración de la página web
 st.set_page_config(page_title="Panel Macro y Bonos", page_icon="📊", layout="centered")
 
+# --- CSS PARA CORREGIR EL MARGEN DE LOS ANCLAJES (EVITA QUE EL TÍTULO QUEDE OCULTO) ---
+st.markdown(
+    """
+    <style>
+    div[id] {
+        scroll-margin-top: 80px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("🌍 Panel Global Macro y de Riesgo Financiero")
 st.markdown("Datos en tiempo real obtenidos desde la Reserva Federal (FRED).")
 
@@ -92,7 +104,7 @@ if "High Yield General (OAS)" in valores_obtenidos and "Segmento CCC (Riesgo Alt
     else:
         st.success("  -> **Estado de crédito: CONVERGENCIA.** Riesgo distribuido de forma homogénea.")
 
-# Guía con enlaces hipertextuales internos corregidos
+# Guía con enlaces hipertextuales internos
 st.markdown("""
 **• ¿Qué vigilar en este panel global?**
 1. **[Estrés Financiero](#estres):** Si supera los 0 o 1 puntos, el problema no es solo de bonos corporativos, sino que empieza a estrangular al sistema interbancario y financiero global.
