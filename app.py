@@ -35,9 +35,11 @@ for nombre, codigo in series_dict.items():
         var = ultimo - anterior
         valores_obtenidos[nombre] = ultimo
         
-        # Asignamos un ID único en HTML a los elementos que queremos enlazar
+        # Asignamos anclajes HTML según el indicador exacto dentro del bucle
         if nombre == "Índice de Estrés Financiero":
             st.markdown('<div id="estres"></div>', unsafe_allow_html=True)
+        elif "Inflación" in nombre:
+            st.markdown('<div id="inflacion"></div>', unsafe_allow_html=True)
             
         # Mostramos cada indicador en una tarjeta visual de Streamlit
         st.subheader(f"🔹 {nombre}")
@@ -52,7 +54,7 @@ for nombre, codigo in series_dict.items():
 
 # --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LA CURVA DE TIPOS (T10Y2Y) ---
 st.markdown("---")
-# Añadimos un ID HTML invisible para que el enlace salte justo aquí
+# Anclaje HTML para la curva de tipos
 st.markdown('<div id="curva"></div>', unsafe_allow_html=True)
 st.subheader("📈 Evolución Histórica: Curva de Tipos (10Y - 2Y)")
 st.markdown("Permite visualizar si venimos de una zona negativa profunda (< 0) que cruza de nuevo hacia arriba (normalización rápida).")
@@ -75,9 +77,6 @@ try:
 except Exception as e:
     st.error(f"No se pudo cargar el histórico de la curva de tipos: {e}")
 
-# --- ANCLAJE PARA INFLACIÓN ---
-st.markdown('<div id="inflacion"></div>', unsafe_allow_html=True)
-
 # Bloque final: Resumen cruzado y guía de interpretación global
 st.markdown("---")
 st.header("💡 Resumen Cruzado y Guía de Interpretación Global")
@@ -93,12 +92,12 @@ if "High Yield General (OAS)" in valores_obtenidos and "Segmento CCC (Riesgo Alt
     else:
         st.success("  -> **Estado de crédito: CONVERGENCIA.** Riesgo distribuido de forma homogénea.")
 
-# Guía con enlaces hipertextuales internos hacia los IDs creados
+# Guía con enlaces hipertextuales internos corregidos
 st.markdown("""
 **• ¿Qué vigilar en este panel global?**
-1. **[Estrés Financiero (#estres)](#estres):** Si supera los 0 o 1 puntos, el problema no es solo de bonos corporativos, sino que empieza a estrangular al sistema interbancario y financiero global.
-2. **[Curva de Tipos (#curva)](#curva):** Una curva profundamente invertida (`< 0`) seguida de una normalización rápida suele ser la antesala histórica de enfriamientos o recesiones económicas.
-3. **[Expectativas de Inflación (#inflacion)](#inflacion):** Si repuntan con fuerza, obligan a los bancos centrales a mantener los tipos de interés altos por más tiempo, penalizando a los activos de mayor riesgo.
+1. **[Estrés Financiero](#estres):** Si supera los 0 o 1 puntos, el problema no es solo de bonos corporativos, sino que empieza a estrangular al sistema interbancario y financiero global.
+2. **[Curva de Tipos](#curva):** Una curva profundamente invertida (`< 0`) seguida de una normalización rápida suele ser la antesala histórica de enfriamientos o recesiones económicas.
+3. **[Expectativas de Inflación](#inflacion):** Si repuntan con fuerza, obligan a los bancos centrales a mantener los tipos de interés altos por más tiempo, penalizando a los activos de mayor riesgo.
 """)
 
 # Descargo de responsabilidad legal al final de la web
