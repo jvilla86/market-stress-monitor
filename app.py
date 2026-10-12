@@ -34,7 +34,7 @@ for nombre, codigo in series_dict.items():
         anterior = data.iloc[-2]
         var = ultimo - anterior
         valores_obtenidos[nombre] = ultimo
-
+        
         # Mostramos cada indicador en una tarjeta visual de Streamlit
         st.subheader(f"🔹 {nombre}")
         col1, col2, col3 = st.columns(3)
@@ -42,19 +42,28 @@ for nombre, codigo in series_dict.items():
         col2.metric("Variación", f"{var:+.2f}")
         col3.text(f"Fecha: {data.index[-1].strftime('%Y-%m-%d')}")
         st.divider()
-
+        
     except Exception as e:
         st.error(f"Error al cargar {nombre}: {e}")
 
-# Resumen cruzado
+# Bloque final: Resumen cruzado y guía de interpretación global
+st.markdown("---")
+st.header("💡 Resumen Cruzado y Guía de Interpretación Global")
+
 if "High Yield General (OAS)" in valores_obtenidos and "Segmento CCC (Riesgo Alto)" in valores_obtenidos:
     general = valores_obtenidos["High Yield General (OAS)"]
     ccc = valores_obtenidos["Segmento CCC (Riesgo Alto)"]
     brecha = ccc - general
-
-    st.subheader("💡 Resumen Cruzado de Crédito")
-    st.write(f"**Brecha de crédito (CCC vs General):** {brecha:.2f} pts")
+    
+    st.write(f"**• Brecha de crédito (CCC vs General):** {brecha:.2f} pts")
     if brecha > 6.0:
-        st.warning("Estado: **DIVERGENCIA**. Castigo severo focalizado en empresas frágiles.")
+        st.warning("  -> **Estado de crédito: DIVERGENCIA.** Castigo severo focalizado en empresas frágiles.")
     else:
-        st.success("Estado: **CONVERGENCIA**. Riesgo distribuido de forma homogénea.")
+        st.success("  -> **Estado de crédito: CONVERGENCIA.** Riesgo distribuido de forma homogénea.")
+
+st.markdown("""
+**• ¿Qué vigilar en este panel global?**
+1. **Estrés Financiero (STLFSI4):** Si supera los 0 o 1 puntos, el problema no es solo de bonos corporativos, sino que empieza a estrangular al sistema interbancario y financiero global.
+2. **Curva de Tipos (T10Y2Y):** Una curva profundamente invertida (`< 0`) seguida de una normalización rápida suele ser la antesala histórica de enfriamientos o recesiones económicas.
+3. **Expectativas de Inflación (T10YIE):** Si repuntan con fuerza, obligan a los bancos centrales a mantener los tipos de interés altos por más tiempo, penalizando a los activos de mayor riesgo.
+""")
