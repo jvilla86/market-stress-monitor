@@ -5,27 +5,19 @@ from fredapi import Fred
 # Configuración de la página web
 st.set_page_config(page_title="Panel Macro y Bonos", page_icon="📊", layout="centered")
 
-# --- INDICAR AL NAVEGADOR QUE LA APP ESTÁ EN ESPAÑOL Y BLOQUEAR INTERACCIÓN TÁCTIL EN GRÁFICOS ---
+# --- FORZAR IDIOMA ESPAÑOL EN EL NAVEGADOR Y BLOQUEAR TÁCTIL EN GRÁFICOS ---
 st.markdown(
     """
+    <div lang="es"></div>
     <script>
-    var docHTML = window.parent.document.documentElement;
-    docHTML.setAttribute('lang', 'es');
+    const doc = window.parent.document;
+    doc.documentElement.lang = 'es';
     </script>
     <style>
     /* Desactiva la captura de gestos táctiles en los gráficos para que el scroll del móvil sea perfecto */
     iframe, [data-testid="stArrowVegaLiteChart"], .vega-embed {
         pointer-events: none;
     }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# --- CSS PARA CORREGIR EL MARGEN DE LOS ANCLAJES (EVITA QUE EL TÍTULO QUEDE OCULTO) ---
-st.markdown(
-    """
-    <style>
     div[id] {
         scroll-margin-top: 80px;
     }
@@ -93,11 +85,10 @@ with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando dat
             if nombre == "Índice de Estrés Financiero":
                 st.markdown('<div id="estres"></div>', unsafe_allow_html=True)
                 
-            # Mostramos cada indicador con su globo de ayuda integrado en la métrica o el título
+            # Mostramos cada indicador con su globo de ayuda integrado en la métrica
             st.subheader(f"🔹 {nombre}")
             col1, col2, col3 = st.columns(3)
             
-            # Añadimos el parámetro help para que aparezca el icono de información flotante
             col1.metric("Valor Actual", f"{ultimo:.2f}", help=descripcion)
             col2.metric("Variación", f"{var:+.2f}")
             col3.text(f"Fecha: {data.index[-1].strftime('%Y-%m-%d')}")
