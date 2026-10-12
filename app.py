@@ -5,6 +5,17 @@ from fredapi import Fred
 # Configuración de la página web
 st.set_page_config(page_title="Panel Macro y Bonos", page_icon="📊", layout="centered")
 
+# --- INDICAR AL NAVEGADOR QUE LA APP ESTÁ EN ESPAÑOL ---
+st.markdown(
+    """
+    <script>
+    var docHTML = window.parent.document.documentElement;
+    docHTML.setAttribute('lang', 'es');
+    </script>
+    """,
+    unsafe_allow_html=True
+)
+
 # --- CSS PARA CORREGIR EL MARGEN DE LOS ANCLAJES (EVITA QUE EL TÍTULO QUEDE OCULTO) ---
 st.markdown(
     """
@@ -110,7 +121,7 @@ with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando dat
     except Exception as e:
         st.error(f"No se pudo cargar el histórico de expectativas de inflación: {e}")
 
-# Bloque final: Resumen cruzado y guía de interpretación global (fuera del spinner para que se pinte al instante)
+# Bloque final: Resumen cruzado y guía de interpretación global
 st.markdown("---")
 st.header("💡 Resumen Cruzado y Guía de Interpretación Global")
 
