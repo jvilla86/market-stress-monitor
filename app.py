@@ -5,13 +5,19 @@ from fredapi import Fred
 # Configuración de la página web
 st.set_page_config(page_title="Panel Macro y Bonos", page_icon="📊", layout="centered")
 
-# --- INDICAR AL NAVEGADOR QUE LA APP ESTÁ EN ESPAÑOL ---
+# --- INDICAR AL NAVEGADOR QUE LA APP ESTÁ EN ESPAÑOL Y BLOQUEAR GESTOS EN GRÁFICOS PARA MÓVILES ---
 st.markdown(
     """
     <script>
     var docHTML = window.parent.document.documentElement;
     docHTML.setAttribute('lang', 'es');
     </script>
+    <style>
+    /* Permite hacer scroll vertical fluido sobre los gráficos en dispositivos táctiles */
+    [data-testid="stArrowVegaLiteChart"], .vega-embed {
+        touch-action: pan-y;
+    }
+    </style>
     """,
     unsafe_allow_html=True
 )
