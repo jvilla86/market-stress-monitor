@@ -46,6 +46,29 @@ for nombre, codigo in series_dict.items():
     except Exception as e:
         st.error(f"Error al cargar {nombre}: {e}")
 
+# --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LA CURVA DE TIPOS (T10Y2Y) ---
+st.markdown("---")
+st.subheader("📈 Evolución Histórica: Curva de Tipos (10Y - 2Y)")
+st.markdown("Permite visualizar si venimos de una zona negativa profunda (< 0) que cruza de nuevo hacia arriba (normalización rápida).")
+
+try:
+    # Obtenemos los datos históricos de los últimos 3 años de la serie T10Y2Y
+    data_curva = fred.get_series("T10Y2Y").dropna()
+    data_reciente = data_curva.loc['2023-01-01':]
+    
+    # Gráfico de líneas interactivo nativo
+    st.line_chart(data_reciente)
+    
+    # Alerta automática basada en el valor actual
+    ultimo_t10y2y = data_curva.iloc[-1]
+    if ultimo_t10y2y < 0:
+        st.warning("⚠️ **Atención:** La curva de tipos actual **sigue invertida**.")
+    else:
+        st.info("ℹ️ La curva de tipos actual está en **terreno positivo (normalizada)**. Observa en el gráfico si este repunte viene de una caída profunda previa.")
+        
+except Exception as e:
+    st.error(f"No se pudo cargar el histórico de la curva de tipos: {e}")
+
 # Bloque final: Resumen cruzado y guía de interpretación global
 st.markdown("---")
 st.header("💡 Resumen Cruzado y Guía de Interpretación Global")
