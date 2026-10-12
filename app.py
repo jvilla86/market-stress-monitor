@@ -67,3 +67,15 @@ st.markdown("""
 2. **Curva de Tipos (T10Y2Y):** Una curva profundamente invertida (`< 0`) seguida de una normalización rápida suele ser la antesala histórica de enfriamientos o recesiones económicas.
 3. **Expectativas de Inflación (T10YIE):** Si repuntan con fuerza, obligan a los bancos centrales a mantener los tipos de interés altos por más tiempo, penalizando a los activos de mayor riesgo.
 """)
+
+# Descargo de responsabilidad legal al final de la web
+st.markdown("---")
+st.caption(
+    "⚠️ **Aviso legal / Disclaimer:** Esta aplicación web tiene un propósito exclusivamente informativo, "
+    "educativo y de análisis técnico personal. Los datos se obtienen de fuentes públicas (FRED), pero "
+    "no se garantiza su precisión absoluta ni su actualización en tiempo real. **Este contenido no constituye "
+    "en ningún caso asesoramiento financiero, recomendación de inversión ni oferta de compra o venta de "
+    "activos.** El autor no asume ninguna responsabilidad por las decisiones financieras o de inversión "
+    "tomadas en base a esta información. Consulte siempre con un profesional financiero cualificado antes "
+    "de tomar decisiones de inversión."
+)
