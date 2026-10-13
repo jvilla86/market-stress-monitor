@@ -1,36 +1,8 @@
 import streamlit as st
 import pandas as pd
 from fredapi import Fred
-# --- FORZAR IDIOMA ESPAÑOL MEDIANTE MUTATION OBSERVER (EVITA QUE STREAMLIT LO DEVUELVA A INGLÉS) ---
-st.markdown(
-    """
-    <script>
-    const observer = new MutationObserver((mutations) => {
-        const htmlTag = window.parent.document.documentElement;
-        if (htmlTag.getAttribute('lang') !== 'es') {
-            htmlTag.setAttribute('lang', 'es');
-        }
-    });
-    observer.observe(window.parent.document.documentElement, {
-        attributes: true,
-        attributeFilter: ['lang']
-    });
-    // Forzamos también de inmediato
-    window.parent.document.documentElement.setAttribute('lang', 'es');
-    </script>
-    <style>
-    /* Desactiva la captura de gestos táctiles en los gráficos para que el scroll del móvil sea perfecto */
-    iframe, [data-testid="stArrowVegaLiteChart"], .vega-embed {
-        pointer-events: none;
-    }
-    div[id] {
-        scroll-margin-top: 80px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-# Configuración de la página web (Título limpio y en español)
+
+# Configuración de la página web
 st.set_page_config(
     page_title="Panel Macro y Bonos Global", 
     page_icon="📊", 
@@ -38,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- CSS PARA CORREGIR EL ANCLAJE Y EL SCROLL TÁCTIL EN MÓVILES ---
+# --- CSS DE ESTILOS Y EXPERIENCIA DE USUARIO (MÓVILES Y SPINNER) ---
 st.markdown(
     """
     <style>
@@ -46,8 +18,16 @@ st.markdown(
     iframe, [data-testid="stArrowVegaLiteChart"], .vega-embed {
         pointer-events: none;
     }
+    
+    /* Corrige el margen superior de los anclajes para que el título no quede oculto */
     div[id] {
         scroll-margin-top: 80px;
+    }
+
+    /* Aumenta el tamaño y resalta el texto dentro de los spinners de carga */
+    .stSpinner > div > div {
+        font-size: 1.25rem !important;
+        font-weight: 600 !important;
     }
     </style>
     """,
@@ -65,7 +45,7 @@ except Exception:
     st.error("Falta configurar la clave FRED API en los Secrets de Streamlit.")
     st.stop()
 
-# Diccionario de series e información en castellano
+# Diccionario de series con su código y su explicación detallada
 series_dict = {
     "High Yield General (OAS)": {
         "codigo": "BAMLH0A0HYM2",
@@ -96,7 +76,7 @@ series_dict = {
 valores_obtenidos = {}
 
 # --- BLOQUE CON AVISO DE CARGA (SPINNER) ---
-with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando datos..."):
+with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando datos en tiempo real..."):
 
     for nombre, datos_serie in series_dict.items():
         try:
@@ -109,6 +89,7 @@ with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando dat
             var = ultimo - anterior
             valores_obtenidos[nombre] = ultimo
             
+            # Asignamos anclajes HTML según el indicador exacto dentro del bucle
             if nombre == "Índice de Estrés Financiero":
                 st.markdown('<div id="estres"></div>', unsafe_allow_html=True)
                 
@@ -119,6 +100,7 @@ with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando dat
             col2.metric("Variación", f"{var:+.2f}")
             col3.text(f"Fecha: {data.index[-1].strftime('%Y-%m-%d')}")
             
+            # Desplegable adaptado a pantallas táctiles y móviles
             with st.expander(f"ℹ️ ¿Qué mide este indicador?"):
                 st.write(explicacion)
                 
@@ -127,11 +109,11 @@ with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando dat
         except Exception as e:
             st.error(f"Error al cargar {nombre}: {e}")
 
-    # --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LA CURVA DE TIPOS ---
+    # --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LA CURVA DE TIPOS (T10Y2Y) ---
     st.markdown("---")
     st.markdown('<div id="curva"></div>', unsafe_allow_html=True)
     st.subheader("📈 Evolución Histórica: Curva de Tipos (10Y - 2Y)")
-    st.markdown("Permite visualizar si venimos de una zona negativa profunda que cruza de nuevo hacia terreno positivo.")
+    st.markdown("Permite visualizar si venimos de una zona negativa profunda (< 0) que cruza de nuevo hacia arriba (normalización rápida).")
 
     try:
         data_curva = fred.get_series("T10Y2Y").dropna()
@@ -143,12 +125,12 @@ with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando dat
         if ultimo_t10y2y < 0:
             st.warning("⚠️ **Atención:** La curva de tipos actual **sigue invertida**.")
         else:
-            st.info("ℹ️ La curva de tipos actual está en **terreno positivo (normalizada)**.")
+            st.info("ℹ️ La curva de tipos actual está en **terreno positivo (normalizada)**. Observa en el gráfico si este repunte viene de una caída profunda previa.")
             
     except Exception as e:
         st.error(f"No se pudo cargar el histórico de la curva de tipos: {e}")
 
-    # --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LAS EXPECTATIVAS DE INFLACIÓN ---
+    # --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LAS EXPECTATIVAS DE INFLACIÓN (T10YIE) ---
     st.markdown("---")
     st.markdown('<div id="inflacion"></div>', unsafe_allow_html=True)
     st.subheader("📈 Evolución Histórica: Expectativas de Inflación (10Y)")
@@ -165,14 +147,14 @@ with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando dat
         variacion_trimestral = ultimo_inf - hace_tres_meses
         
         if variacion_trimestral > 0.25:
-            st.warning(f"⚠️ **Alerta de Inflación:** Las expectativas han repuntado un **+{variacion_trimestral:.2f} pts** en los últimos meses.")
+            st.warning(f"⚠️ **Alerta de Inflación:** Las expectativas han repuntado un **+{variacion_trimestral:.2f} pts** en los últimos meses. Ojo a la presión sobre los tipos.")
         else:
-            st.info(f"ℹ️ Las expectativas de inflación se mantienen estables (último valor: **{ultimo_inf:.2f}%**).")
+            st.info(f"ℹ️ Las expectativas de inflación se mantienen relativamente estables (último valor: **{ultimo_inf:.2f}%**).")
             
     except Exception as e:
         st.error(f"No se pudo cargar el histórico de expectativas de inflación: {e}")
 
-# Bloque final: Resumen cruzado y guía
+# Bloque final: Resumen cruzado y guía de interpretación global
 st.markdown("---")
 st.header("💡 Resumen Cruzado y Guía de Interpretación Global")
 
@@ -187,13 +169,15 @@ if "High Yield General (OAS)" in valores_obtenidos and "Segmento CCC (Riesgo Alt
     else:
         st.success("  -> **Estado de crédito: CONVERGENCIA.** Riesgo distribuido de forma homogénea.")
 
+# Guía con enlaces hipertextuales internos con saltos precisos
 st.markdown("""
 **• ¿Qué vigilar en este panel global?**
-1. **[Estrés Financiero](#estres):** Tensión en el sistema interbancario y financiero global.
-2. **[Curva de Tipos](#curva):** Inversión y normalización como antesala de ciclos económicos.
-3. **[Expectativas de Inflación](#inflacion):** Presión sobre los tipos de interés oficiales.
+1. **[Estrés Financiero](#estres):** Si supera los 0 o 1 puntos, el problema no es solo de bonos corporativos, sino que empieza a estrangular al sistema interbancario y financiero global.
+2. **[Curva de Tipos](#curva):** Una curva profundamente invertida (`< 0`) seguida de una normalización rápida suele ser la antesala histórica de enfriamientos o recesiones económicas.
+3. **[Expectativas de Inflación](#inflacion):** Si repuntan con fuerza, obligan a los bancos centrales a mantener los tipos de interés altos por más tiempo, penalizando a los activos de mayor riesgo.
 """)
 
+# Descargo de responsabilidad legal al final de la web
 st.markdown("---")
 st.caption(
     "⚠️ **Aviso legal / Disclaimer:** Esta aplicación web tiene un propósito exclusivamente informativo, "
