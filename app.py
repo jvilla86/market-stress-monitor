@@ -10,59 +10,25 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CONFIGURACIÓN DE LA BARRA LATERAL (IDIOMA Y TEMAS) ---
-st.sidebar.header("⚙️ Configuración")
-idioma = st.sidebar.radio("🌐 Idioma / Language:", ["Español", "English"])
+# --- SELECTOR DE IDIOMA EN LA BARRA LATERAL ---
+st.sidebar.header("🌐 Idioma / Language")
+idioma = st.sidebar.radio("Selecciona idioma / Select language:", ["Español", "English"])
 
-# Selector de apariencia / temas
-tema = st.sidebar.selectbox(
-    "🎨 Apariencia / Theme:", 
-    ["Claro (Light)", "Oscuro (Dark)", "Azul (Ocean)", "Sepia (Vintage)"]
-)
-
-# --- DICCIONARIO DE TEMAS VISUALES (CSS INYECTADO) ---
-if tema == "Oscuro (Dark)":
-    css_tema = """
-    <style>
-    .stApp { background-color: #0e1117; color: #fafafa; }
-    section[data-testid="stSidebar"] { background-color: #161b22; }
-    h1, h2, h3, p, span, label { color: #fafafa !important; }
-    </style>
-    """
-elif tema == "Azul (Ocean)":
-    css_tema = """
-    <style>
-    .stApp { background-color: #0f172a; color: #e2e8f0; }
-    section[data-testid="stSidebar"] { background-color: #1e293b; }
-    h1, h2, h3, p, span, label { color: #f8fafc !important; }
-    </style>
-    """
-elif tema == "Sepia (Vintage)":
-    css_tema = """
-    <style>
-    .stApp { background-color: #fbf0d9; color: #433422; }
-    section[data-testid="stSidebar"] { background-color: #f2e2c4; }
-    h1, h2, h3, p, span, label { color: #433422 !important; }
-    </style>
-    """
-else:  # Claro por defecto
-    css_tema = """
-    <style>
-    .stApp { background-color: #ffffff; color: #262730; }
-    section[data-testid="stSidebar"] { background-color: #f8f9fa; }
-    </style>
-    """
-
-# Inyectamos el CSS del tema junto con las optimizaciones móviles y spinner
+# --- CSS DE ESTILOS Y EXPERIENCIA DE USUARIO (MÓVILES Y SPINNER GRANDE) ---
 st.markdown(
-    css_tema + """
+    """
     <style>
+    /* Desactiva la captura de gestos táctiles en los gráficos para que el scroll del móvil sea perfecto */
     iframe, [data-testid="stArrowVegaLiteChart"], .vega-embed {
         pointer-events: none;
     }
+    
+    /* Corrige el margen superior de los anclajes para que el título no quede oculto */
     div[id] {
         scroll-margin-top: 80px;
     }
+
+    /* Forzar tamaño grande y negrita en el texto del spinner de carga de Streamlit */
     [data-testid="stStatusWidget"] div, 
     .stSpinner > div > div > div,
     .stSpinner div p {
@@ -150,7 +116,7 @@ Si deseas profundizar en la teoría macroeconómica, el análisis de renta fija 
         "resumen_titulo": "💡 Cross-Metric Summary & Global Interpretation Guide",
         "brecha_texto": "• Credit Spread Gap (CCC vs Broad HY):",
         "divergencia": "  -> **Credit Status: DIVERGENCE.** Severe market distress concentrated in low-grade borrowers.",
-        "convergencia": "  -> **Credit Status: CONVERGENCIA.** Credit risk spread evenly across issuers.",
+        "convergencia": "  -> **Credit Status: CONVERGENCE.** Credit risk spread evenly across issuers.",
         "que_vigilar": """
 **• Key indicators to monitor in this dashboard:**
 1. **[Financial Stress Index](#estres):** Values exceeding 0 or 1 indicate systemic tension.
