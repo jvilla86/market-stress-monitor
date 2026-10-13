@@ -5,7 +5,7 @@ from fredapi import Fred
 # Configuración de la página web
 st.set_page_config(page_title="Panel Macro y Bonos", page_icon="📊", layout="centered")
 
-# --- FORZAR IDIOMA ESPAÑOL EN EL NAVEGADOR Y BLOQUEAR TÁCTIL EN GRÁFICOS ---
+# --- FORZAR IDIOMA ESPAÑOL Y BLOQUEAR TÁCTIL EN GRÁFICOS ---
 st.markdown(
     """
     <div lang="es"></div>
@@ -36,45 +36,32 @@ try:
 except Exception:
     st.error("Falta configurar la clave FRED API en los Secrets de Streamlit.")
     st.stop()
-# --- CSS PARA CORREGIR LOS TOOLTIPS (HELP) EN MÓVILES ---
-st.markdown(
-    """
-    <style>
-    /* Limita el ancho de los globos de ayuda y fuerza el salto de línea en móviles */
-    div[data-baseweb="tooltip"], div[data-baseweb="popover"] {
-        max-width: 85vw !important;
-        word-wrap: break-word !important;
-        white-space: normal !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-# Diccionario que incluye tanto el código de la serie como su explicación para el tooltip (help)
+
+# Diccionario con el código de la serie y su explicación para el desplegable
 series_dict = {
     "High Yield General (OAS)": {
         "codigo": "BAMLH0A0HYM2",
-        "help": "Mide el exceso de rendimiento que exigen los inversores por los bonos corporativos de alto riesgo (basura) frente a los bonos gubernamentales seguros."
+        "info": "Mide el exceso de rendimiento que exigen los inversores por los bonos corporativos de alto riesgo (basura) frente a los bonos gubernamentales seguros."
     },
     "Segmento CCC (Riesgo Alto)": {
         "codigo": "BAMLH0A3HYC",
-        "help": "Diferencial de tipos de las empresas más vulnerables y con mayor probabilidad de impago dentro del universo de bonos de alto rendimiento."
+        "info": "Diferencial de tipos de las empresas más vulnerables y con mayor probabilidad de impago dentro del universo de bonos de alto rendimiento."
     },
     "Tipos Reales 10Y (EE.UU.)": {
         "codigo": "DFII10",
-        "help": "Rendimiento de los bonos del Tesoro a 10 años descontando la inflación esperada. Mide el coste real del dinero a largo plazo."
+        "info": "Rendimiento de los bonos del Tesoro a 10 años descontando la inflación esperada. Mide el coste real del dinero a largo plazo."
     },
     "Índice de Estrés Financiero": {
         "codigo": "STLFSI4",
-        "help": "Mide el nivel de tensión en los mercados financieros globales (interbancario, deuda y renta variable). Valores superiores a 0 indican estrés elevado."
+        "info": "Mide el nivel de tensión en los mercados financieros globales (interbancario, deuda y renta variable). Valores superiores a 0 indican estrés elevado."
     },
     "Curva de Tipos (10Y - 2Y)": {
         "codigo": "T10Y2Y",
-        "help": "Diferencia entre el bono a 10 años y el a 2 años. Si es negativa (invertida), históricamente ha sido un aviso fiable de recesión económica."
+        "info": "Diferencia entre el bono a 10 años y el a 2 años. Si es negativa (invertida), históricamente ha sido un aviso fiable de recesión económica."
     },
     "Expectativas de Inflación (10Y)": {
         "codigo": "T10YIE",
-        "help": "Inflación media anual que los inversores anticipan para la próxima década basándose en el mercado de deuda."
+        "info": "Inflación media anual que los inversores anticipan para la próxima década basándose en el mercado de deuda."
     }
 }
 
@@ -83,10 +70,10 @@ valores_obtenidos = {}
 # --- BLOQUE CON AVISO DE CARGA (SPINNER) ---
 with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando datos..."):
 
-    for nombre, info in series_dict.items():
+    for nombre, datos_serie in series_dict.items():
         try:
-            codigo = info["codigo"]
-            descripcion = info["help"]
+            codigo = datos_serie["codigo"]
+            explicacion = datos_serie["info"]
             
             data = fred.get_series(codigo).dropna()
             ultimo = data.iloc[-1]
@@ -98,13 +85,18 @@ with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando dat
             if nombre == "Índice de Estrés Financiero":
                 st.markdown('<div id="estres"></div>', unsafe_allow_html=True)
                 
-            # Mostramos cada indicador con su globo de ayuda integrado en la métrica
+            # Mostramos cada indicador
             st.subheader(f"🔹 {nombre}")
             col1, col2, col3 = st.columns(3)
             
-            col1.metric("Valor Actual", f"{ultimo:.2f}", help=descripcion)
+            col1.metric("Valor Actual", f"{ultimo:.2f}")
             col2.metric("Variación", f"{var:+.2f}")
             col3.text(f"Fecha: {data.index[-1].strftime('%Y-%m-%d')}")
+            
+            # Usamos un desplegable adaptado a móviles en lugar de un tooltip flotante
+            with st.expander(f"ℹ️ ¿Qué mide este indicador?"):
+                st.write(explicacion)
+                
             st.divider()
             
         except Exception as e:
