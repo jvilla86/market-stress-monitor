@@ -1,73 +1,73 @@
-# 🌍 Panel Global Macro y de Riesgo Financiero
+# 📊 Financial Risk Dashboard (Dashboard de Riesgo Financiero)
 
-Una aplicación web interactiva y en tiempo real desarrollada en **Python** con **Streamlit** y conectada directamente a la **API de la Reserva Federal de San Luis (FRED)**. 
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-App-red.svg)](https://streamlit.io/)
+[![FRED API](https://img.shields.io/badge/Data-FRED%20API-green.svg)](https://fred.stlouisfed.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-El panel está diseñado para monitorizar de un vistazo el pulso de los mercados de deuda corporativa, las condiciones de liquidez interbancaria, la estructura de tipos de interés y las expectativas de inflación a largo plazo.
-
----
-
-## 🚀 Características Principales
-
-* **Datos en Tiempo Real:** Extracción automatizada de series macroeconómicas oficiales mediante `fredapi`.
-* **Indicadores Clave de Riesgo:**
-  * **High Yield General (OAS) & Segmento CCC:** Monitorización de primas de riesgo y tensiones en el crédito corporativo (con cálculo dinámico de la brecha de divergencia).
-  * **Tipos Reales a 10 Años:** Coste real del dinero en EE. UU. descontando la inflación esperada.
-  * **Índice de Estrés Financiero (STLFSI4):** Detección de tensiones en los mercados de financiación global.
-  * **Curva de Tipos (10Y - 2Y):** Seguimiento de inversiones y procesos de normalización rápida.
-  * **Expectativas de Inflación (10Y):** Seguimiento de la evolución de las previsiones de precios a diez años.
-* **Gráficos Históricos Interactivos:** Visualización de tendencias de los últimos años para la Curva de Tipos y las Expectativas de Inflación.
-* **Optimización Total para Móviles:** 
-  * Comportamiento táctil optimizado para permitir un *scroll* vertical fluido sin interferencias en las gráficas.
-  * Tarjetas con desplegables explicativos (`st.expander`) perfectamente adaptados a pantallas estrechas.
-* **Navegación Interna Inteligente:** Guía interactiva con anclajes automáticos hacia cada sección del panel con compensación de margen superior.
-* **Aviso de Carga:** Retroalimentación visual interactiva mientras se consultan los servidores de la FRED.
-* **Localización y Accesibilidad:** Configurado de manera nativa para navegadores en español, evitando avisos automáticos de traducción de terceros.
+A professional-grade, mobile-optimized macro and financial risk dashboard built with **Python**, **Streamlit**, and real-time data from the **Federal Reserve Economic Data (FRED)** API. Designed to provide instant market insights through an automated **"Risk Traffic Light"** system.
 
 ---
 
-## 🛠️ Stack Tecnológico
+## 🌟 Key Features
 
-* **Lenguaje:** Python 3.10+
-* **Framework Web:** Streamlit (desplegado en Streamlit Community Cloud)
-* **Librerías Principales:** `pandas`, `fredapi`
-* **Estilos y Experiencia de Usuario:** HTML5, CSS3 integrado para control responsive y anclajes, JavaScript para metadatos del navegador.
-
----
-
-## ⚙️ Configuración y Despliegue Local
-
-### 1. Clonar el repositorio
-```bash
-git clone https://github.com/tu-usuario/tu-repositorio.git
-cd tu-repositorio
-```
-
-### 2. Instalar dependencias
-Asegúrate de tener Python instalado y ejecuta:
-```bash
-pip install streamlit pandas fredapi
-```
-
-### 3. Configurar la API Key de FRED
-Crea una carpeta llamada `.streamlit` en la raíz del proyecto y dentro añade un archivo llamado `secrets.toml` con tu clave personal:
-```toml
-FRED_API_KEY = "tu_clave_de_api_aqui"
-```
-
-### 4. Ejecutar la aplicación
-```bash
-streamlit run app.py
-```
+*   **🚦 Automated Risk Traffic Light:** Instantly evaluates systemic financial stress, corporate high-yield spreads, and yield curve inversions to categorize current market risk into Green (Stable), Yellow (Caution), or Red (High Stress).
+*   **🌐 Full Bilingual Support (ES / EN):** Seamlessly switch between Spanish and English via the sidebar to access translated metrics, descriptions, and economic insights.
+*   **📱 Mobile-First UX:** Custom CSS overrides, touch-optimized Vega-Lite charts, responsive containers, and large status indicators designed for fluid mobile viewing.
+*   **📈 Real-Time FRED Integration:** Pulls live economic indicators directly from the St. Louis Fed database, including:
+    *   *High Yield Corporate Bond Spreads (OAS)*
+    *   *CCC-rated High Yield Segment (Distressed Debt)*
+    *   *10-Year Real Interest Rates (TIPS)*
+    *   *St. Louis Fed Financial Stress Index (STLFSI4)*
+    *   *Yield Curve (10Y - 2Y Treasury Spread)*
+    *   *10-Year Breakeven Inflation Expectations*
+*   **💡 Cross-Metric Intelligence:** Computes the credit spread gap (CCC vs. Broad High Yield) to detect credit market divergence or convergence.
 
 ---
 
-## 💡 Guía de Interpretación Global
-El panel incluye una sección de resumen cruzado que evalúa automáticamente:
-1. **Estrés Financiero:** Niveles de tensión sistémica interbancaria.
-2. **Curva de Tipos:** Análisis de recesión e inversión/normalización.
-3. **Expectativas de Inflación:** Presión sobre los tipos de los bancos centrales.
+## 🛠️ Tech Stack
+
+*   **Language:** Python 3.10+
+*   **Web Framework:** Streamlit
+*   **Data & Analytics:** Pandas, `fredapi`
+*   **Visualization:** Streamlit Native Line Charts (Vega-Lite backend)
+*   **Styling:** Custom CSS injected for mobile responsiveness and typography overrides
 
 ---
 
-## ⚠️ Aviso Legal / Disclaimer
-*Esta aplicación web tiene un propósito exclusivamente informativo, educativo y de análisis técnico personal. Los datos se obtienen de fuentes públicas (FRED), pero no se garantiza su precisión absoluta ni su actualización en tiempo real. **Este contenido no constituye en ningún caso asesoramiento financiero, recomendación de inversión ni oferta de compra o venta de activos.** El autor no asume ninguna responsabilidad por las decisiones financieras o de inversión tomadas en base a esta información. Consulte siempre con un profesional financiero cualificado antes de tomar decisiones de inversión.*
+## 🚀 Quick Start / Local Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/tu-usuario/financial-risk-dashboard.git
+   cd financial-risk-dashboard
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Configure your FRED API Key:**
+   Get a free API key from [FRED](https://fred.stlouisfed.org/docs/api/api_key.html). Create a folder named `.streamlit` in your project root and add a `secrets.toml` file:
+   ```toml
+   FRED_API_KEY = "tu_api_key_aqui"
+   ```
+
+4. **Run the application locally:**
+   ```bash
+   streamlit run app.py
+   ```
+
+---
+
+## 📚 Educational Resources & References
+The dashboard includes an integrated curation of official and educational sources in both English and Spanish (FRED, Banco de España, European Central Bank, Economipedia, and Investopedia) to help users interpret macro indicators.
+
+---
+
+## ⚖️ Disclaimer
+*This web application is created strictly for informational, educational, and technical analysis purposes. Data is sourced from public Federal Reserve APIs (FRED), but accuracy or real-time delivery is not guaranteed. This content does not constitute financial advice, investment recommendations, or an offer to buy or sell securities.*
+
+---
+✨ *Tool built with Python, Streamlit, and assisted by **Gemini**.*
