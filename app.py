@@ -4,7 +4,7 @@ from fredapi import Fred
 
 # Configuración de la página web
 st.set_page_config(
-    page_title="Panel Macro y Bonos Global", 
+    page_title="Dashboard de Riesgo Financiero", 
     page_icon="📊", 
     layout="centered",
     initial_sidebar_state="collapsed"
@@ -36,8 +36,9 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title("🌍 Panel Global Macro y de Riesgo Financiero")
-st.markdown("Datos macroeconómicos en tiempo real obtenidos directamente desde la Reserva Federal (FRED).")
+st.title("📊 Dashboard de Riesgo Financiero")
+st.markdown("Datos macroeconómicos y de mercado en tiempo real obtenidos directamente desde la Reserva Federal (FRED).")
+
 
 # Obtenemos la API Key de los secretos de Streamlit
 try:
