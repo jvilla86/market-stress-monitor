@@ -36,7 +36,20 @@ try:
 except Exception:
     st.error("Falta configurar la clave FRED API en los Secrets de Streamlit.")
     st.stop()
-
+# --- CSS PARA CORREGIR LOS TOOLTIPS (HELP) EN MÓVILES ---
+st.markdown(
+    """
+    <style>
+    /* Limita el ancho de los globos de ayuda y fuerza el salto de línea en móviles */
+    div[data-baseweb="tooltip"], div[data-baseweb="popover"] {
+        max-width: 85vw !important;
+        word-wrap: break-word !important;
+        white-space: normal !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 # Diccionario que incluye tanto el código de la serie como su explicación para el tooltip (help)
 series_dict = {
     "High Yield General (OAS)": {
