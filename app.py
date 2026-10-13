@@ -191,7 +191,8 @@ with st.spinner(t["spinner"]):
         except Exception:
             pass 
 
-st.success(t["exito"])
+# Mensaje de éxito limpio sin caja verde llamativa
+st.markdown(f"*{t['exito']}*")
 
 # --- SEMÁFORO DE RIESGO MACRO GLOBAL ---
 st.markdown(f"### {t['semaforo_titulo']}")
