@@ -68,7 +68,7 @@ series_dict = {
 valores_obtenidos = {}
 
 # --- BLOQUE CON AVISO DE CARGA (SPINNER) ---
-with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando datos..."):
+with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando datos... Puede tardar unos segundos"):
 
     for nombre, datos_serie in series_dict.items():
         try:
