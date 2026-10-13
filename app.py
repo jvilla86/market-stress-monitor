@@ -77,7 +77,7 @@ series_dict = {
 
 valores_obtenidos = {}
 
-# --- BLOQUE CON AVISO DE CARGA Y MENSAJE DE ÉXITO ---
+# --- BLOQUE CON AVISO DE CARGA (SPINNER) ---
 with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando datos en tiempo real..."):
 
     for nombre, datos_serie in series_dict.items():
@@ -111,53 +111,53 @@ with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando dat
         except Exception as e:
             st.error(f"Error al cargar {nombre}: {e}")
 
-# Cuadrito verde indicando que los datos se han obtenido correctamente
+# Cuadrito verde de éxito al terminar de cargar los datos
 st.success("✅ ¡Datos obtenidos correctamente desde la Reserva Federal (FRED)!")
 
-    # --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LA CURVA DE TIPOS (T10Y2Y) ---
-    st.markdown("---")
-    st.markdown('<div id="curva"></div>', unsafe_allow_html=True)
-    st.subheader("📈 Evolución Histórica: Curva de Tipos (10Y - 2Y)")
-    st.markdown("Permite visualizar si venimos de una zona negativa profunda (< 0) que cruza de nuevo hacia arriba (normalización rápida).")
+# --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LA CURVA DE TIPOS (T10Y2Y) ---
+st.markdown("---")
+st.markdown('<div id="curva"></div>', unsafe_allow_html=True)
+st.subheader("📈 Evolución Histórica: Curva de Tipos (10Y - 2Y)")
+st.markdown("Permite visualizar si venimos de una zona negativa profunda (< 0) que cruza de nuevo hacia arriba (normalización rápida).")
 
-    try:
-        data_curva = fred.get_series("T10Y2Y").dropna()
-        data_reciente = data_curva.loc['2023-01-01':]
+try:
+    data_curva = fred.get_series("T10Y2Y").dropna()
+    data_reciente = data_curva.loc['2023-01-01':]
+    
+    st.line_chart(data_reciente)
+    
+    ultimo_t10y2y = data_curva.iloc[-1]
+    if ultimo_t10y2y < 0:
+        st.warning("⚠️ **Atención:** La curva de tipos actual **sigue invertida**.")
+    else:
+        st.info("ℹ️ La curva de tipos actual está en **terreno positivo (normalizada)**. Observa en el gráfico si este repunte viene de una caída profunda previa.")
         
-        st.line_chart(data_reciente)
-        
-        ultimo_t10y2y = data_curva.iloc[-1]
-        if ultimo_t10y2y < 0:
-            st.warning("⚠️ **Atención:** La curva de tipos actual **sigue invertida**.")
-        else:
-            st.info("ℹ️ La curva de tipos actual está en **terreno positivo (normalizada)**. Observa en el gráfico si este repunte viene de una caída profunda previa.")
-            
-    except Exception as e:
-        st.error(f"No se pudo cargar el histórico de la curva de tipos: {e}")
+except Exception as e:
+    st.error(f"No se pudo cargar el histórico de la curva de tipos: {e}")
 
-    # --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LAS EXPECTATIVAS DE INFLACIÓN (T10YIE) ---
-    st.markdown("---")
-    st.markdown('<div id="inflacion"></div>', unsafe_allow_html=True)
-    st.subheader("📈 Evolución Histórica: Expectativas de Inflación (10Y)")
-    st.markdown("Permite visualizar si las expectativas de inflación están repuntando con fuerza o se mantienen estables.")
+# --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LAS EXPECTATIVAS DE INFLACIÓN (T10YIE) ---
+st.markdown("---")
+st.markdown('<div id="inflacion"></div>', unsafe_allow_html=True)
+st.subheader("📈 Evolución Histórica: Expectativas de Inflación (10Y)")
+st.markdown("Permite visualizar si las expectativas de inflación están repuntando con fuerza o se mantienen estables.")
 
-    try:
-        data_inflacion = fred.get_series("T10YIE").dropna()
-        data_inf_reciente = data_inflacion.loc['2023-01-01':]
+try:
+    data_inflacion = fred.get_series("T10YIE").dropna()
+    data_inf_reciente = data_inflacion.loc['2023-01-01':]
+    
+    st.line_chart(data_inf_reciente)
+    
+    ultimo_inf = data_inflacion.iloc[-1]
+    hace_tres_meses = data_inflacion.iloc[-60] if len(data_inflacion) >= 60 else data_inflacion.iloc[0]
+    variacion_trimestral = ultimo_inf - hace_tres_meses
+    
+    if variacion_trimestral > 0.25:
+        st.warning(f"⚠️ **Alerta de Inflación:** Las expectativas han repuntado un **+{variacion_trimestral:.2f} pts** en los últimos meses. Ojo a la presión sobre los tipos.")
+    else:
+        st.info(f"ℹ️ Las expectativas de inflación se mantienen relativamente estables (último valor: **{ultimo_inf:.2f}%**).")
         
-        st.line_chart(data_inf_reciente)
-        
-        ultimo_inf = data_inflacion.iloc[-1]
-        hace_tres_meses = data_inflacion.iloc[-60] if len(data_inflacion) >= 60 else data_inflacion.iloc[0]
-        variacion_trimestral = ultimo_inf - hace_tres_meses
-        
-        if variacion_trimestral > 0.25:
-            st.warning(f"⚠️ **Alerta de Inflación:** Las expectativas han repuntado un **+{variacion_trimestral:.2f} pts** en los últimos meses. Ojo a la presión sobre los tipos.")
-        else:
-            st.info(f"ℹ️ Las expectativas de inflación se mantienen relativamente estables (último valor: **{ultimo_inf:.2f}%**).")
-            
-    except Exception as e:
-        st.error(f"No se pudo cargar el histórico de expectativas de inflación: {e}")
+except Exception as e:
+    st.error(f"No se pudo cargar el histórico de expectativas de inflación: {e}")
 
 # Bloque final: Resumen cruzado y guía de interpretación global
 st.markdown("---")
