@@ -77,7 +77,7 @@ series_dict = {
 
 valores_obtenidos = {}
 
-# --- BLOQUE CON AVISO DE CARGA (SPINNER) ---
+# --- BLOQUE CON AVISO DE CARGA Y MENSAJE DE ÉXITO ---
 with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando datos en tiempo real..."):
 
     for nombre, datos_serie in series_dict.items():
@@ -110,6 +110,9 @@ with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando dat
             
         except Exception as e:
             st.error(f"Error al cargar {nombre}: {e}")
+
+# Cuadrito verde indicando que los datos se han obtenido correctamente
+st.success("✅ ¡Datos obtenidos correctamente desde la Reserva Federal (FRED)!")
 
     # --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LA CURVA DE TIPOS (T10Y2Y) ---
     st.markdown("---")
