@@ -191,6 +191,17 @@ st.markdown("""
 3. **[Expectativas de Inflación](#inflacion):** Si repuntan con fuerza, obligan a los bancos centrales a mantener los tipos de interés altos por más tiempo, penalizando a los activos de mayor riesgo.
 """)
 
+# --- NUEVA SECCIÓN: RECURSOS Y FUENTES DE APRENDIZAJE ---
+st.markdown("---")
+st.header("📚 Recursos y Fuentes de Interés")
+st.markdown("""
+Si deseas profundizar en la teoría macroeconómica, el análisis de renta fija y el funcionamiento de los mercados de deuda, te recomiendo consultar las siguientes fuentes oficiales y educativas:
+
+*   🌐 **[FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/):** La base de datos oficial de la Reserva Federal de San Luis donde puedes explorar miles de series temporales y documentarte sobre cada indicador económico.
+*   🏦 **[Federal Reserve Bank of St. Louis - Education](https://www.stlouisfed.org/education):** Artículos divulgativos, herramientas interactivas y lecciones excelentes para entender la política monetaria, la inflación y la curva de tipos.
+*   📈 **[Investopedia - Bond Yields & Spreads](https://www.investopedia.com/):** Una enciclopedia financiera muy útil para repasar conceptos técnicos como el *Option-Adjusted Spread (OAS)*, los bonos de alto rendimiento (*High Yield*) y el riesgo de crédito.
+""")
+
 # Descargo de responsabilidad legal al final de la web
 st.markdown("---")
 st.caption(
