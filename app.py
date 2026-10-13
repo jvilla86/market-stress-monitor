@@ -10,21 +10,59 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CSS DE ESTILOS Y EXPERIENCIA DE USUARIO (MÓVILES Y SPINNER GRANDE) ---
-st.markdown(
-    """
+# --- CONFIGURACIÓN DE LA BARRA LATERAL (IDIOMA Y TEMAS) ---
+st.sidebar.header("⚙️ Configuración")
+idioma = st.sidebar.radio("🌐 Idioma / Language:", ["Español", "English"])
+
+# Selector de apariencia / temas
+tema = st.sidebar.selectbox(
+    "🎨 Apariencia / Theme:", 
+    ["Claro (Light)", "Oscuro (Dark)", "Azul (Ocean)", "Sepia (Vintage)"]
+)
+
+# --- DICCIONARIO DE TEMAS VISUALES (CSS INYECTADO) ---
+if tema == "Oscuro (Dark)":
+    css_tema = """
     <style>
-    /* Desactiva la captura de gestos táctiles en los gráficos para que el scroll del móvil sea perfecto */
+    .stApp { background-color: #0e1117; color: #fafafa; }
+    section[data-testid="stSidebar"] { background-color: #161b22; }
+    h1, h2, h3, p, span, label { color: #fafafa !important; }
+    </style>
+    """
+elif tema == "Azul (Ocean)":
+    css_tema = """
+    <style>
+    .stApp { background-color: #0f172a; color: #e2e8f0; }
+    section[data-testid="stSidebar"] { background-color: #1e293b; }
+    h1, h2, h3, p, span, label { color: #f8fafc !important; }
+    </style>
+    """
+elif tema == "Sepia (Vintage)":
+    css_tema = """
+    <style>
+    .stApp { background-color: #fbf0d9; color: #433422; }
+    section[data-testid="stSidebar"] { background-color: #f2e2c4; }
+    h1, h2, h3, p, span, label { color: #433422 !important; }
+    </style>
+    """
+else:  # Claro por defecto
+    css_tema = """
+    <style>
+    .stApp { background-color: #ffffff; color: #262730; }
+    section[data-testid="stSidebar"] { background-color: #f8f9fa; }
+    </style>
+    """
+
+# Inyectamos el CSS del tema junto con las optimizaciones móviles y spinner
+st.markdown(
+    css_tema + """
+    <style>
     iframe, [data-testid="stArrowVegaLiteChart"], .vega-embed {
         pointer-events: none;
     }
-    
-    /* Corrige el margen superior de los anclajes para que el título no quede oculto */
     div[id] {
         scroll-margin-top: 80px;
     }
-
-    /* Forzar tamaño grande y negrita en el texto del spinner de carga de Streamlit */
     [data-testid="stStatusWidget"] div, 
     .stSpinner > div > div > div,
     .stSpinner div p {
@@ -35,10 +73,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-# --- SELECTOR DE IDIOMA EN LA BARRA LATERAL ---
-st.sidebar.header("🌐 Idioma / Language")
-idioma = st.sidebar.radio("Selecciona idioma / Select language:", ["Español", "English"])
 
 # --- DICCIONARIO DE TRADUCCIONES BILINGÜE ---
 textos = {
@@ -79,17 +113,17 @@ textos = {
 Si deseas profundizar en la teoría macroeconómica, el análisis de renta fija y el funcionamiento de los mercados de deuda, te recomiendo consultar las siguientes fuentes de referencia:
 
 **🇪🇸 En Español:**
-*   📖 **[Economipedia](https://economipedia.com/):** La enciclopedia económica de referencia para consultar conceptos clave de forma sencilla (como *prima de riesgo*, *curva de tipos* o *bonos high yield*).
-*   🏦 **[Banco de España - Estadísticas y Publicaciones](https://www.bde.es/):** Portal oficial para consultar informes económicos, boletines trimestrales y estadísticas de tipos de interés y deuda.
-*   🇪🇺 **[Banco Central Europeo (BCE) - Educación](https://www.ecb.europa.eu/):** Guías y secciones educativas oficiales sobre política monetaria, estabilidad financiera e inflación en la eurozona.
-*   💬 **[Rankia (Sección Renta Fija y Macro)](https://www.rankia.com/):** Comunidad de referencia en español con artículos formativos, análisis y debates sobre inversión en bonos y economía.
+*   📖 **[Economipedia](https://economipedia.com/):** La enciclopedia económica de referencia para consultar conceptos clave de forma sencilla.
+*   🏦 **[Banco de España - Estadísticas y Publicaciones](https://www.bde.es/):** Portal oficial para consultar informes económicos y estadísticas de tipos de interés.
+*   🇪🇺 **[Banco Central Europeo (BCE) - Educación](https://www.ecb.europa.eu/):** Guías oficiales sobre política monetaria y estabilidad financiera.
+*   💬 **[Rankia (Renta Fija y Macro)](https://www.rankia.com/):** Comunidad de referencia con análisis y debates sobre inversión en bonos.
 
 **🇬🇧 En Inglés (Fuentes Oficiales):**
-*   🌐 **[FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/):** La base de datos oficial de la Reserva Federal de San Luis de donde se extraen todas las series de este panel.
-*   📊 **[Federal Reserve Bank of St. Louis - Education](https://www.stlouisfed.org/education):** Artículos y herramientas interactivas excelentes para entender los entresijos de la macroeconomía global.
+*   🌐 **[FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/):** Base de datos oficial de la Reserva Federal de San Luis.
+*   📊 **[St. Louis Fed Education](https://www.stlouisfed.org/education):** Herramientas interactivas para entender la macroeconomía global.
 """,
         "creditos": "✨ *Herramienta desarrollada con Python, Streamlit y asistida por **Gemini**.*",
-        "disclaimer": "⚠️ **Aviso legal / Disclaimer:** Esta aplicación web tiene un propósito exclusivamente informativo, educativo y de análisis técnico personal. Los datos se obtienen de fuentes públicas (FRED), pero no se garantiza su precisión absoluta ni su actualización en tiempo real. **Este contenido no constituye en ningún caso asesoramiento financiero, recomendación de inversión ni oferta de compra o venta de activos.** El autor no asume ninguna responsabilidad por las decisiones financieras o de inversión tomadas en base a esta información. Consulte siempre con un profesional financiero cualificado antes de tomar decisiones de inversión."
+        "disclaimer": "⚠️ **Aviso legal / Disclaimer:** Esta aplicación web tiene un propósito exclusivamente informativo, educativo y de análisis técnico personal. Los datos se obtienen de fuentes públicas (FRED), pero no se garantiza su precisión absoluta. **Este contenido no constituye asesoramiento financiero ni recomendación de inversión.**"
     },
     "English": {
         "page_title": "📊 Financial Risk Dashboard",
@@ -106,38 +140,34 @@ Si deseas profundizar en la teoría macroeconómica, el análisis de renta fija 
         "fecha": "Date",
         "que_mide": "ℹ️ What does this indicator measure?",
         "curva_titulo": "📈 Historical Evolution: Yield Curve (10Y - 2Y)",
-        "curva_desc": "Visualizes whether the curve is emerging from deep negative territory (< 0) back into positive ground (rapid normalization).",
+        "curva_desc": "Visualizes whether the curve is emerging from deep negative territory (< 0) back into positive ground.",
         "curva_invertida": "⚠️ **Warning:** The yield curve **remains inverted**.",
-        "curva_normal": "ℹ️ The yield curve is currently in **positive territory (normalized)**. Check if this uptick stems from a previous deep inversion.",
+        "curva_normal": "ℹ️ The yield curve is currently in **positive territory (normalized)**.",
         "inflacion_titulo": "📈 Historical Evolution: Inflation Expectations (10Y)",
         "inflacion_desc": "Tracks whether long-term inflation expectations are surging or staying anchored.",
-        "inflacion_alerta": "⚠️ **Inflation Warning:** Inflation expectations have ticked up in recent months. Keep an eye on rate pressures.",
+        "inflacion_alerta": "⚠️ **Inflation Warning:** Inflation expectations have ticked up in recent months.",
         "inflacion_estable": "ℹ️ Inflation expectations remain anchored within stable ranges.",
         "resumen_titulo": "💡 Cross-Metric Summary & Global Interpretation Guide",
         "brecha_texto": "• Credit Spread Gap (CCC vs Broad HY):",
         "divergencia": "  -> **Credit Status: DIVERGENCE.** Severe market distress concentrated in low-grade borrowers.",
-        "convergencia": "  -> **Credit Status: CONVERGENCE.** Credit risk spread evenly across issuers.",
+        "convergencia": "  -> **Credit Status: CONVERGENCIA.** Credit risk spread evenly across issuers.",
         "que_vigilar": """
 **• Key indicators to monitor in this dashboard:**
-1. **[Financial Stress Index](#estres):** Values exceeding 0 or 1 indicate systemic tension reaching interbank and liquidity channels.
-2. **[Yield Curve](#curva):** Deep inversion (`< 0`) followed by rapid steepening has historically preceded economic slowdowns or recessions.
-3. **[Inflation Expectations](#inflacion):** Sharp increases force central banks to maintain higher policy rates for longer, weighing on risk assets.
+1. **[Financial Stress Index](#estres):** Values exceeding 0 or 1 indicate systemic tension.
+2. **[Yield Curve](#curva):** Deep inversion (`< 0`) historically precedes economic slowdowns.
+3. **[Inflation Expectations](#inflacion):** Sharp increases force central banks to maintain higher policy rates.
 """,
         "recursos_titulo": "📚 Educational Resources & Official Sources",
         "recursos_contenido": """
-To deepen your understanding of macroeconomic theory, fixed income analysis, and debt market dynamics, explore these key reference sources:
+To deepen your understanding of macroeconomic theory and fixed income analysis:
 
 **🇬🇧 English Sources (Official & Global):**
-*   🌐 **[FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/):** St. Louis Fed's database supplying all series displayed in this dashboard.
-*   📊 **[Federal Reserve Bank of St. Louis - Education](https://www.stlouisfed.org/education):** Excellent interactive guides explaining monetary policy, interest rates, and financial stability.
-*   📈 **[Investopedia - Bond Yields & Spreads](https://www.investopedia.com/):** Essential resource for technical concepts like *Option-Adjusted Spread (OAS)*, High Yield bonds, and credit risk.
-
-**🇪🇸 Spanish Sources:**
-*   📖 **[Economipedia](https://economipedia.com/):** Clear financial dictionary covering risk premiums, yield curves, and fixed-income fundamentals.
-*   🏦 **[Banco de España](https://www.bde.es/):** Official statistics, quarterly economic reports, and monetary analysis.
+*   🌐 **[FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/):** St. Louis Fed's database.
+*   📊 **[St. Louis Fed Education](https://www.stlouisfed.org/education):** Interactive macroeconomic guides.
+*   📈 **[Investopedia - Bond Yields & Spreads](https://www.investopedia.com/):** Technical fixed-income definitions.
 """,
         "creditos": "✨ *Tool built with Python, Streamlit, and assisted by **Gemini**.*",
-        "disclaimer": "⚠️ **Disclaimer:** This web application is created strictly for informational, educational, and technical analysis purposes. Data is sourced from public Federal Reserve APIs (FRED), but accuracy or real-time delivery is not guaranteed. **This content does not constitute financial advice, investment recommendations, or an offer to buy or sell securities.** The author assumes no responsibility for financial decisions made based on this dashboard. Always consult a qualified financial professional before making investment decisions."
+        "disclaimer": "⚠️ **Disclaimer:** This web application is created strictly for informational and educational purposes. **This content does not constitute financial advice or investment recommendations.**"
     }
 }
 
@@ -184,7 +214,7 @@ series_dict = {
 
 valores_obtenidos = {}
 
-# --- BLOQUE CON AVISO DE CARGA (SPINNER) Y PRE-CARGA DE DATOS ---
+# --- BLOQUE CON SPINNER Y PRE-CARGA DE DATOS ---
 with st.spinner(t["spinner"]):
     for nombre, datos_serie in series_dict.items():
         try:
