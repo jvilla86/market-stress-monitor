@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- CSS DE ESTILOS Y EXPERIENCIA DE USUARIO (MÓVILES Y SPINNER) ---
+# --- CSS DE ESTILOS Y EXPERIENCIA DE USUARIO (MÓVILES Y SPINNER GRANDE) ---
 st.markdown(
     """
     <style>
@@ -24,10 +24,12 @@ st.markdown(
         scroll-margin-top: 80px;
     }
 
-    /* Aumenta el tamaño y resalta el texto dentro de los spinners de carga */
-    .stSpinner > div > div {
-        font-size: 1.25rem !important;
-        font-weight: 600 !important;
+    /* Forzar tamaño grande y negrita en el texto del spinner de carga de Streamlit */
+    [data-testid="stStatusWidget"] div, 
+    .stSpinner > div > div > div,
+    .stSpinner div p {
+        font-size: 1.35rem !important;
+        font-weight: 700 !important;
     }
     </style>
     """,
