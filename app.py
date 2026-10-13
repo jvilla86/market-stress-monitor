@@ -204,15 +204,21 @@ st.markdown("""
 3. **[Expectativas de Inflación](#inflacion):** Si repuntan con fuerza, obligan a los bancos centrales a mantener los tipos de interés altos por más tiempo, penalizando a los activos de mayor riesgo.
 """)
 
-# Recursos y Fuentes de Interés
+# --- RECURSOS Y FUENTES DE INTERÉS (ACTUALIZADO CON RECURSOS EN ESPAÑOL) ---
 st.markdown("---")
 st.header("📚 Recursos y Fuentes de Interés")
 st.markdown("""
-Si deseas profundizar en la teoría macroeconómica, el análisis de renta fija y el funcionamiento de los mercados de deuda, te recomiendo consultar las siguientes fuentes oficiales y educativas:
+Si deseas profundizar en la teoría macroeconómica, el análisis de renta fija y el funcionamiento de los mercados de deuda, te recomiendo consultar las siguientes fuentes de referencia:
 
-*   🌐 **[FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/):** La base de datos oficial de la Reserva Federal de San Luis donde puedes explorar miles de series temporales y documentarte sobre cada indicador económico.
-*   🏦 **[Federal Reserve Bank of St. Louis - Education](https://www.stlouisfed.org/education):** Artículos divulgativos, herramientas interactivas y lecciones excelentes para entender la política monetaria, la inflación y la curva de tipos.
-*   📈 **[Investopedia - Bond Yields & Spreads](https://www.investopedia.com/):** Una enciclopedia financiera muy útil para repasar conceptos técnicos como el *Option-Adjusted Spread (OAS)*, los bonos de alto rendimiento (*High Yield*) y el riesgo de crédito.
+**🇪🇸 En Español:**
+*   📖 **[Economipedia](https://economipedia.com/):** La enciclopedia económica de referencia para consultar conceptos clave de forma sencilla (como *prima de riesgo*, *curva de tipos* o *bonos high yield*).
+*   🏦 **[Banco de España - Estadísticas y Publicaciones](https://www.bde.es/):** Portal oficial para consultar informes económicos, boletines trimestrales y estadísticas de tipos de interés y deuda.
+*   🇪🇺 **[Banco Central Europeo (BCE) - Educación](https://www.ecb.europa.eu/):** Guías y secciones educativas oficiales sobre política monetaria, estabilidad financiera e inflación en la eurozona.
+*   💬 **[Rankia (Sección Renta Fija y Macro)](https://www.rankia.com/):** Comunidad de referencia en español con artículos formativos, análisis y debates sobre inversión en bonos y economía.
+
+**🇬🇧 En Inglés (Fuentes Oficiales):**
+*   🌐 **[FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/):** La base de datos oficial de la Reserva Federal de San Luis de donde se extraen todas las series de este panel.
+*   📊 **[Federal Reserve Bank of St. Louis - Education](https://www.stlouisfed.org/education):** Artículos y herramientas interactivas excelentes para entender los entresijos de la macroeconomía global.
 """)
 
 # Descargo de responsabilidad legal al final de la web
