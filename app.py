@@ -77,7 +77,7 @@ series_dict = {
 
 valores_obtenidos = {}
 
-# --- BLOQUE CON AVISO DE CARGA (SPINNER) ---
+# --- BLOQUE CON AVISO DE CARGA (SPINNER) Y PRE-CARGA DE DATOS PARA EL SEMÁFORO ---
 with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando datos en tiempo real..."):
 
     for nombre, datos_serie in series_dict.items():
@@ -92,15 +92,14 @@ with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando dat
 # Cuadrito verde de éxito ubicado arriba del todo
 st.success("✅ ¡Datos obtenidos correctamente desde la Reserva Federal (FRED)!")
 
-# --- SEMÁFORO DE RIESGO MACRO GLOBAL ---
+# --- SEMÁFORO DE RIESGO MACRO GLOBAL (UBICADO EN LA CABECERA) ---
 st.markdown("### 🚦 Semáforo de Riesgo de Mercado")
 
-# Evaluamos condiciones de forma automática con los datos obtenidos
 estres_financiero = valores_obtenidos.get("Índice de Estrés Financiero", 0)
 curva_tipos = valores_obtenidos.get("Curva de Tipos (10Y - 2Y)", 0)
 hy_general = valores_obtenidos.get("High Yield General (OAS)", 0)
 
-# Lógica sencilla de puntuación de alerta
+# Lógica de evaluación de alertas
 if estres_financiero > 0.5 or hy_general > 5.5:
     st.error("🔴 **ALERTA DE TENSIÓN ELEVADA:** Se detectan niveles de estrés financiero o primas de riesgo corporativo elevados en el sistema.")
 elif curva_tipos < 0:
@@ -140,7 +139,6 @@ for nombre, datos_serie in series_dict.items():
         st.error(f"Error al cargar {nombre}: {e}")
 
 # --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LA CURVA DE TIPOS (T10Y2Y) ---
-data_curva = None
 try:
     st.markdown('<div id="curva"></div>', unsafe_allow_html=True)
     st.subheader("📈 Evolución Histórica: Curva de Tipos (10Y - 2Y)")
