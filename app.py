@@ -204,7 +204,7 @@ st.markdown("""
 3. **[Expectativas de Inflación](#inflacion):** Si repuntan con fuerza, obligan a los bancos centrales a mantener los tipos de interés altos por más tiempo, penalizando a los activos de mayor riesgo.
 """)
 
-# --- RECURSOS Y FUENTES DE INTERÉS (ACTUALIZADO CON RECURSOS EN ESPAÑOL) ---
+# Recursos y Fuentes de Interés
 st.markdown("---")
 st.header("📚 Recursos y Fuentes de Interés")
 st.markdown("""
@@ -221,8 +221,10 @@ Si deseas profundizar en la teoría macroeconómica, el análisis de renta fija 
 *   📊 **[Federal Reserve Bank of St. Louis - Education](https://www.stlouisfed.org/education):** Artículos y herramientas interactivas excelentes para entender los entresijos de la macroeconomía global.
 """)
 
-# Descargo de responsabilidad legal al final de la web
+# Créditos de desarrollo y disclaimer legal
 st.markdown("---")
+st.markdown("✨ *Herramienta desarrollada con Python, Streamlit y asistida por **Gemini**.*")
+
 st.caption(
     "⚠️ **Aviso legal / Disclaimer:** Esta aplicación web tiene un propósito exclusivamente informativo, "
     "educativo y de análisis técnico personal. Los datos se obtienen de fuentes públicas (FRED), pero "
