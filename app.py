@@ -1,7 +1,35 @@
 import streamlit as st
 import pandas as pd
 from fredapi import Fred
-
+# --- FORZAR IDIOMA ESPAÑOL MEDIANTE MUTATION OBSERVER (EVITA QUE STREAMLIT LO DEVUELVA A INGLÉS) ---
+st.markdown(
+    """
+    <script>
+    const observer = new MutationObserver((mutations) => {
+        const htmlTag = window.parent.document.documentElement;
+        if (htmlTag.getAttribute('lang') !== 'es') {
+            htmlTag.setAttribute('lang', 'es');
+        }
+    });
+    observer.observe(window.parent.document.documentElement, {
+        attributes: true,
+        attributeFilter: ['lang']
+    });
+    // Forzamos también de inmediato
+    window.parent.document.documentElement.setAttribute('lang', 'es');
+    </script>
+    <style>
+    /* Desactiva la captura de gestos táctiles en los gráficos para que el scroll del móvil sea perfecto */
+    iframe, [data-testid="stArrowVegaLiteChart"], .vega-embed {
+        pointer-events: none;
+    }
+    div[id] {
+        scroll-margin-top: 80px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 # Configuración de la página web (Título limpio y en español)
 st.set_page_config(
     page_title="Panel Macro y Bonos Global", 
