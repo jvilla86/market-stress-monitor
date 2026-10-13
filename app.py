@@ -83,36 +83,45 @@ with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando dat
     for nombre, datos_serie in series_dict.items():
         try:
             codigo = datos_serie["codigo"]
-            explicacion = datos_serie["info"]
-            
             data = fred.get_series(codigo).dropna()
             ultimo = data.iloc[-1]
-            anterior = data.iloc[-2]
-            var = ultimo - anterior
             valores_obtenidos[nombre] = ultimo
-            
-            # Asignamos anclajes HTML según el indicador exacto dentro del bucle
-            if nombre == "Índice de Estrés Financiero":
-                st.markdown('<div id="estres"></div>', unsafe_allow_html=True)
-                
-            st.subheader(f"🔹 {nombre}")
-            col1, col2, col3 = st.columns(3)
-            
-            col1.metric("Valor Actual", f"{ultimo:.2f}")
-            col2.metric("Variación", f"{var:+.2f}")
-            col3.text(f"Fecha: {data.index[-1].strftime('%Y-%m-%d')}")
-            
-            # Desplegable adaptado a pantallas táctiles y móviles
-            with st.expander(f"ℹ️ ¿Qué mide este indicador?"):
-                st.write(explicacion)
-                
-            st.divider()
-            
         except Exception as e:
-            st.error(f"Error al cargar {nombre}: {e}")
+            pass # Las excepciones individuales ya se gestionan abajo al pintar
 
-# Cuadrito verde de éxito al terminar de cargar los datos
+# Cuadrito verde de éxito ubicado exactamente arriba del todo, donde estaba el spinner
 st.success("✅ ¡Datos obtenidos correctamente desde la Reserva Federal (FRED)!")
+
+# --- PINTADO DE TARJETAS Y DESPLEGABLES ---
+for nombre, datos_serie in series_dict.items():
+    try:
+        codigo = datos_serie["codigo"]
+        explicacion = datos_serie["info"]
+        
+        data = fred.get_series(codigo).dropna()
+        ultimo = data.iloc[-1]
+        anterior = data.iloc[-2]
+        var = ultimo - anterior
+        
+        # Asignamos anclajes HTML según el indicador exacto dentro del bucle
+        if nombre == "Índice de Estrés Financiero":
+            st.markdown('<div id="estres"></div>', unsafe_allow_html=True)
+            
+        st.subheader(f"🔹 {nombre}")
+        col1, col2, col3 = st.columns(3)
+        
+        col1.metric("Valor Actual", f"{ultimo:.2f}")
+        col2.metric("Variación", f"{var:+.2f}")
+        col3.text(f"Fecha: {data.index[-1].strftime('%Y-%m-%d')}")
+        
+        # Desplegable adaptado a pantallas táctiles y móviles
+        with st.expander(f"ℹ️ ¿Qué mide este indicador?"):
+            st.write(explicacion)
+            
+        st.divider()
+        
+    except Exception as e:
+        st.error(f"Error al cargar {nombre}: {e}")
 
 # --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LA CURVA DE TIPOS (T10Y2Y) ---
 st.markdown("---")
