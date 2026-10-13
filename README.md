@@ -1,75 +1,73 @@
 # 🌍 Panel Global Macro y de Riesgo Financiero
 
-Una aplicación web interactiva y ligera construida con **Python**, **Streamlit** y la API de la Reserva Federal de San Luis (**FRED**). Este panel está diseñado para monitorizar en tiempo real el estrés del mercado de crédito, las primas de riesgo de bonos corporativos (*High Yield* y segmento *CCC*), los tipos de interés reales, el estrés financiero sistémico, el ciclo de la curva de tipos y las expectativas de inflación.
+Una aplicación web interactiva y en tiempo real desarrollada en **Python** con **Streamlit** y conectada directamente a la **API de la Reserva Federal de San Luis (FRED)**. 
 
-## 🚀 Características
-
-* **Datos en tiempo real:** Conexión directa mediante API con FRED para extraer las series macroeconómicas más actualizadas.
-
-* **Indicadores clave de crédito y macro:**
-  * *High Yield General (OAS)* y *Segmento CCC (Riesgo Alto)*: Termómetro del riesgo de impago corporativo.
-  * *Tipos Reales a 10 Años (DFII10)*: Contexto para activos refugio.
-  * *Índice de Estrés Financiero (STLFSI4)*: Detección de tensiones a nivel sistémico e interbancario.
-  * *Curva de Tipos (10Y - 2Y)*: Seguimiento histórico de alertas de ciclo económico.
-  * *Expectativas de Inflación (10Y)*: Pulso de las presiones de precios a largo plazo.
-
-* **Resumen cruzado automatizado:** Calcula a brecha de riesgo entre el segmento CCC y el mercado general de alto rendimiento para detectar divergencias o estrés focalizado.
-
-* **Diseño web adaptado:** Desplegado mediante Streamlit Community Cloud para consultarlo cómodamente desde el navegador de cualquier dispositivo (móvil, tablet o PC).
-
-## 🛠️ Requisitos e Instalación Local
-
-Si deseas ejecutar este proyecto en tu propio entorno local mediante la terminal:
-
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/tu-usuario/nombre-de-tu-repositorio.git
-   cd nombre-de-tu-repositorio
-   ```
-
-2. Crea y activa un entorno virtual:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate
-   ```
-
-3. Instala las dependencias necesarias:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Ejecuta la aplicación web localmente con Streamlit:
-   ```bash
-   streamlit run app.py
-   ```
-
-## 📦 Estructura del Repositorio
-
-* `app.py`: Código principal de la aplicación web en Streamlit.
-* `requirements.txt`: Archivo con las dependencias de Python necesarias (`pandas`, `fredapi`, `streamlit`).
-* `README.md`: Documentación del proyecto.
-
-## 🔑 Configuración de la API (Secrets)
-
-Para que la aplicación pueda consultar los datos de FRED, necesita una clave de API gratuita de la Reserva Federal.
-
-* **En despliegues en la nube (Streamlit Community Cloud):** Configura la clave en el panel de control de tu aplicación en la sección *Advanced settings > Secrets* usando el siguiente formato TOML:
-  ```toml
-  FRED_API_KEY = "tu_clave_api_de_fred_aqui"
-  ```
-
-## 💡 Guía Rápida de Interpretación
-
-* **Brecha de Crédito (CCC vs General):** Si supera los `6.0` puntos, indica una **Divergencia**, señalando un castigo severo y focalizado en las empresas más frágiles y endeudadas.
-* **Estrés Financiero (STLFSI4):** Valores por encima de `0` o `1` alertan de tensiones que van más allá del mercado corporativo, afectando a la estabilidad financiera global.
-* **Curva de Tipos (T10Y2Y):** Los valores negativos (curva invertida) avisan históricamente de posibles enfriamientos o recesiones económicas de cara a los siguientes meses.
+El panel está diseñado para monitorizar de un vistazo el pulso de los mercados de deuda corporativa, las condiciones de liquidez interbancaria, la estructura de tipos de interés y las expectativas de inflación a largo plazo.
 
 ---
 
-## ⚠️ Aviso Legal y Descargo de Responsabilidad (Disclaimer)
+## 🚀 Características Principales
 
-Este repositorio y la aplicación asociada tienen un carácter **puramente informativo, educativo y de investigación personal**. 
+* **Datos en Tiempo Real:** Extracción automatizada de series macroeconómicas oficiales mediante `fredapi`.
+* **Indicadores Clave de Riesgo:**
+  * **High Yield General (OAS) & Segmento CCC:** Monitorización de primas de riesgo y tensiones en el crédito corporativo (con cálculo dinámico de la brecha de divergencia).
+  * **Tipos Reales a 10 Años:** Coste real del dinero en EE. UU. descontando la inflación esperada.
+  * **Índice de Estrés Financiero (STLFSI4):** Detección de tensiones en los mercados de financiación global.
+  * **Curva de Tipos (10Y - 2Y):** Seguimiento de inversiones y procesos de normalización rápida.
+  * **Expectativas de Inflación (10Y):** Seguimiento de la evolución de las previsiones de precios a diez años.
+* **Gráficos Históricos Interactivos:** Visualización de tendencias de los últimos años para la Curva de Tipos y las Expectativas de Inflación.
+* **Optimización Total para Móviles:** 
+  * Comportamiento táctil optimizado para permitir un *scroll* vertical fluido sin interferencias en las gráficas.
+  * Tarjetas con desplegables explicativos (`st.expander`) perfectamente adaptados a pantallas estrechas.
+* **Navegación Interna Inteligente:** Guía interactiva con anclajes automáticos hacia cada sección del panel con compensación de margen superior.
+* **Aviso de Carga:** Retroalimentación visual interactiva mientras se consultan los servidores de la FRED.
+* **Localización y Accesibilidad:** Configurado de manera nativa para navegadores en español, evitando avisos automáticos de traducción de terceros.
 
-* **No constituye asesoramiento financiero:** Ninguno de los datos, indicadores, resúmenes o interpretaciones aquí mostrados debe considerarse en ningún caso como una recomendación de compra, venta o inversión en ningún activo financiero, bono, criptomoneda o instrumento de mercado.
-* **Exención de responsabilidad:** El autor de este código no asume ninguna responsabilidad, directa o indirecta, por las pérdidas económicas, daños o decisiones de inversión que puedan derivarse del uso de esta herramienta o de la interpretación de los datos mostrados.
-* **Consulta con un profesional:** Los mercados financieros son complejos y conllevan riesgos elevados. Se recomienda encarecidamente consultar siempre con un asesor financiero cualificado o un profesional autorizado antes de tomar cualquier decisión de inversión o gestión patrimonial.
+---
+
+## 🛠️ Stack Tecnológico
+
+* **Lenguaje:** Python 3.10+
+* **Framework Web:** Streamlit (desplegado en Streamlit Community Cloud)
+* **Librerías Principales:** `pandas`, `fredapi`
+* **Estilos y Experiencia de Usuario:** HTML5, CSS3 integrado para control responsive y anclajes, JavaScript para metadatos del navegador.
+
+---
+
+## ⚙️ Configuración y Despliegue Local
+
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/tu-usuario/tu-repositorio.git
+cd tu-repositorio
+```
+
+### 2. Instalar dependencias
+Asegúrate de tener Python instalado y ejecuta:
+```bash
+pip install streamlit pandas fredapi
+```
+
+### 3. Configurar la API Key de FRED
+Crea una carpeta llamada `.streamlit` en la raíz del proyecto y dentro añade un archivo llamado `secrets.toml` con tu clave personal:
+```toml
+FRED_API_KEY = "tu_clave_de_api_aqui"
+```
+
+### 4. Ejecutar la aplicación
+```bash
+streamlit run app.py
+```
+
+---
+
+## 💡 Guía de Interpretación Global
+El panel incluye una sección de resumen cruzado que evalúa automáticamente:
+1. **Estrés Financiero:** Niveles de tensión sistémica interbancaria.
+2. **Curva de Tipos:** Análisis de recesión e inversión/normalización.
+3. **Expectativas de Inflación:** Presión sobre los tipos de los bancos centrales.
+
+---
+
+## ⚠️ Aviso Legal / Disclaimer
+*Esta aplicación web tiene un propósito exclusivamente informativo, educativo y de análisis técnico personal. Los datos se obtienen de fuentes públicas (FRED), pero no se garantiza su precisión absoluta ni su actualización en tiempo real. **Este contenido no constituye en ningún caso asesoramiento financiero, recomendación de inversión ni oferta de compra o venta de activos.** El autor no asume ninguna responsabilidad por las decisiones financieras o de inversión tomadas en base a esta información. Consulte siempre con un profesional financiero cualificado antes de tomar decisiones de inversión.*
