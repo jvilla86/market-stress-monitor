@@ -87,10 +87,28 @@ with st.spinner("🔄 Conectando con la API de la Reserva Federal y cargando dat
             ultimo = data.iloc[-1]
             valores_obtenidos[nombre] = ultimo
         except Exception as e:
-            pass # Las excepciones individuales ya se gestionan abajo al pintar
+            pass 
 
-# Cuadrito verde de éxito ubicado exactamente arriba del todo, donde estaba el spinner
+# Cuadrito verde de éxito ubicado arriba del todo
 st.success("✅ ¡Datos obtenidos correctamente desde la Reserva Federal (FRED)!")
+
+# --- SEMÁFORO DE RIESGO MACRO GLOBAL ---
+st.markdown("### 🚦 Semáforo de Riesgo de Mercado")
+
+# Evaluamos condiciones de forma automática con los datos obtenidos
+estres_financiero = valores_obtenidos.get("Índice de Estrés Financiero", 0)
+curva_tipos = valores_obtenidos.get("Curva de Tipos (10Y - 2Y)", 0)
+hy_general = valores_obtenidos.get("High Yield General (OAS)", 0)
+
+# Lógica sencilla de puntuación de alerta
+if estres_financiero > 0.5 or hy_general > 5.5:
+    st.error("🔴 **ALERTA DE TENSIÓN ELEVADA:** Se detectan niveles de estrés financiero o primas de riesgo corporativo elevados en el sistema.")
+elif curva_tipos < 0:
+    st.warning("🟡 **PRECAUCIÓN / VIGILANCIA:** Los mercados muestran señales mixtas o anomalías (como curva de tipos invertida), sugiriendo cautela en activos de riesgo.")
+else:
+    st.success("🟢 **ENTORNO ESTABLE / CALMA:** Los indicadores globales de estrés y diferenciales de crédito se mantienen en rangos de normalidad.")
+
+st.markdown("---")
 
 # --- PINTADO DE TARJETAS Y DESPLEGABLES ---
 for nombre, datos_serie in series_dict.items():
@@ -103,7 +121,6 @@ for nombre, datos_serie in series_dict.items():
         anterior = data.iloc[-2]
         var = ultimo - anterior
         
-        # Asignamos anclajes HTML según el indicador exacto dentro del bucle
         if nombre == "Índice de Estrés Financiero":
             st.markdown('<div id="estres"></div>', unsafe_allow_html=True)
             
@@ -114,7 +131,6 @@ for nombre, datos_serie in series_dict.items():
         col2.metric("Variación", f"{var:+.2f}")
         col3.text(f"Fecha: {data.index[-1].strftime('%Y-%m-%d')}")
         
-        # Desplegable adaptado a pantallas táctiles y móviles
         with st.expander(f"ℹ️ ¿Qué mide este indicador?"):
             st.write(explicacion)
             
@@ -124,12 +140,12 @@ for nombre, datos_serie in series_dict.items():
         st.error(f"Error al cargar {nombre}: {e}")
 
 # --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LA CURVA DE TIPOS (T10Y2Y) ---
-st.markdown("---")
-st.markdown('<div id="curva"></div>', unsafe_allow_html=True)
-st.subheader("📈 Evolución Histórica: Curva de Tipos (10Y - 2Y)")
-st.markdown("Permite visualizar si venimos de una zona negativa profunda (< 0) que cruza de nuevo hacia arriba (normalización rápida).")
-
+data_curva = None
 try:
+    st.markdown('<div id="curva"></div>', unsafe_allow_html=True)
+    st.subheader("📈 Evolución Histórica: Curva de Tipos (10Y - 2Y)")
+    st.markdown("Permite visualizar si venimos de una zona negativa profunda (< 0) que cruza de nuevo hacia arriba (normalización rápida).")
+
     data_curva = fred.get_series("T10Y2Y").dropna()
     data_reciente = data_curva.loc['2023-01-01':]
     
@@ -145,12 +161,12 @@ except Exception as e:
     st.error(f"No se pudo cargar el histórico de la curva de tipos: {e}")
 
 # --- GRÁFICO HISTÓRICO Y ANÁLISIS DE LAS EXPECTATIVAS DE INFLACIÓN (T10YIE) ---
-st.markdown("---")
-st.markdown('<div id="inflacion"></div>', unsafe_allow_html=True)
-st.subheader("📈 Evolución Histórica: Expectativas de Inflación (10Y)")
-st.markdown("Permite visualizar si las expectativas de inflación están repuntando con fuerza o se mantienen estables.")
-
 try:
+    st.markdown("---")
+    st.markdown('<div id="inflacion"></div>', unsafe_allow_html=True)
+    st.subheader("📈 Evolución Histórica: Expectativas de Inflación (10Y)")
+    st.markdown("Permite visualizar si las expectativas de inflación están repuntando con fuerza o se mantienen estables.")
+
     data_inflacion = fred.get_series("T10YIE").dropna()
     data_inf_reciente = data_inflacion.loc['2023-01-01':]
     
@@ -183,7 +199,6 @@ if "High Yield General (OAS)" in valores_obtenidos and "Segmento CCC (Riesgo Alt
     else:
         st.success("  -> **Estado de crédito: CONVERGENCIA.** Riesgo distribuido de forma homogénea.")
 
-# Guía con enlaces hipertextuales internos con saltos precisos
 st.markdown("""
 **• ¿Qué vigilar en este panel global?**
 1. **[Estrés Financiero](#estres):** Si supera los 0 o 1 puntos, el problema no es solo de bonos corporativos, sino que empieza a estrangular al sistema interbancario y financiero global.
@@ -191,7 +206,7 @@ st.markdown("""
 3. **[Expectativas de Inflación](#inflacion):** Si repuntan con fuerza, obligan a los bancos centrales a mantener los tipos de interés altos por más tiempo, penalizando a los activos de mayor riesgo.
 """)
 
-# --- NUEVA SECCIÓN: RECURSOS Y FUENTES DE APRENDIZAJE ---
+# Recursos y Fuentes de Interés
 st.markdown("---")
 st.header("📚 Recursos y Fuentes de Interés")
 st.markdown("""
